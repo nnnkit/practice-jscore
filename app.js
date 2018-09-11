@@ -1,9 +1,9 @@
-var books = [
+var books = JSON.parse(localStorage.getItem('bookly-books')) || [
   'The Lord of the Rings Trilogy',
   'A Game of Thrones',
   'To Kill a Mockingbird',
-  'The Little Prince'
 ];
+
 var ulElement = document.querySelector('#book-list ul');
 var addBookElement = document.getElementById('book-value');
 var addButton = document.querySelector('#add-book button');
@@ -14,9 +14,9 @@ function displayBook(books = [],elm) {
   elm.innerHTML = books.map((book, i) => {
     return (
       `<li>
-      <span class="name" data-id=${i}>${book}</span>
-      <span class="delete" data-id=${i}>Delete</span>
-    </li>`
+          <span class="name" data-id=${i}>${book}</span>
+          <span class="delete" data-id=${i}>Delete</span>
+        </li>`
     )
   }).join('');
 }
@@ -27,6 +27,7 @@ function addBook(e) {
   books.push(book);
   displayBook(books,ulElement);
   addBookElement.value = "";
+  localStorage.setItem('bookly-books', JSON.stringify(books));
 }
 
 // Function to delete book
@@ -34,7 +35,8 @@ function deleteBook(e) {
   if(!e.target.className === 'delete') return;
   let id = e.target.dataset.id;
   books.splice(id, 1);
-  displayBook(books, ulElement)
+  displayBook(books, ulElement);
+  localStorage.setItem('bookly-books', JSON.stringify(books))
 }
 
 function searchBooks(e) {
